@@ -275,21 +275,21 @@ partition_1 db 'CPM.A           '
 partition_2 db 'CPM.B           '
 dpbase:	
     defw	0000h, 0000h
-	defw	0000h, 0000h
-	defw	dirbf, dpblk
-	defw	chk00, all00
+    defw	0000h, 0000h
+    defw	dirbf, dpblk
+    defw	chk00, all00
 ;
 dpblk:	;disk parameter block for all disks.
-	defw	#0200		;sectors per track
-	defm	#05		;block shift factor
-	defm	#1f		;block mask
-	defm	#01		;null mask
-	defw	#07ff	;disk size-1
-	defw	#01ff	;directory max
-	defm	240		;alloc 0
-	defm	0		;alloc 1
-	defw	32768	;check size
-	defw	#0	    ;track offset
+    defw	#0200		;sectors per track
+    defm	#05		;block shift factor
+    defm	#1f		;block mask
+    defm	#01		;null mask
+    defw	#07ff	;disk size-1
+    defw	#01ff	;directory max
+    defm	240		;alloc 0
+    defm	0		;alloc 1
+    defw	32768	;check size
+    defw	#0	    ;track offset
 
 
 dirbf   ds  128

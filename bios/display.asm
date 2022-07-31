@@ -77,7 +77,7 @@ putC:
     cp 1 : jp z, home
     cp 8 : jp z, handleBS
     cp 12 : jp z, cls
-	cp 13 : jp z, carridge_return
+    cp 13 : jp z, carridge_return
 
     cp 10 : jp z, cursor_down
     cp 20 : jp z, cursor_up
@@ -136,32 +136,32 @@ cursor_down:
     jp draw_cursor
 _putC:
     push af
-	call find_screen
+    call find_screen
 
     di
     ld a, %00000101 : ld bc, #1ffd : out (c),a
-	pop af
+    pop af
     call drawC
     ld a, %00000001 : ld bc, #1ffd : out (c),a
 cursor_right:	
     ld hl, (coords)
-	inc l
+    inc l
     ld a, l
     cp  79
     jr nc, .cr
 .ok
-	ld (coords), hl
-	ret
+    ld (coords), hl
+    ret
 .cr
-	ld hl, (coords)
-	inc h
-	ld l, 0, (coords), hl
+    ld hl, (coords)
+    inc h
+    ld l, 0, (coords), hl
 scrollCheck:
     ld a, h
-	cp 24
-	jp c, .exit
+    cp 24
+    jp c, .exit
     dec h
-	ld (coords), hl
+    ld (coords), hl
     call scroll
 .exit
     ld a, %00000001 : ld bc, #1ffd : out (c),a
@@ -267,12 +267,12 @@ drawC:
 .get_char:
     ld a, (.char_tmp)
     ld l, a
-	ld h, 0
-	add hl, hl
-	add hl, hl
-	add hl, hl
-	ld bc, font
-	add hl, bc
+    ld h, 0
+    add hl, hl
+    add hl, hl
+    add hl, hl
+    ld bc, font
+    add hl, bc
     ex hl, de
     ret
 .char_tmp db 0
@@ -326,113 +326,113 @@ basic_draw:
 scroll
     di
     ld a, %00000101 : ld bc, #1ffd : out (c),a
-	ld	hl,table_addr_scr
-	ld	b,184
+    ld	hl,table_addr_scr
+    ld	b,184
 .pass1		
-	push	bc
+    push	bc
 
-	ld	e,(hl)
-	inc	hl
-	ld	d,(hl)
-	inc	hl
+    ld	e,(hl)
+    inc	hl
+    ld	d,(hl)
+    inc	hl
 
-	push	hl
+    push	hl
 
-	ld	bc,14
-	add	hl,bc
-	ld	c,(hl)
-	inc	hl
-	ld	b,(hl)
+    ld	bc,14
+    add	hl,bc
+    ld	c,(hl)
+    inc	hl
+    ld	b,(hl)
 
-	ld	h,b
-	ld	l,c
+    ld	h,b
+    ld	l,c
 
-	ld	bc,32
-	ldir
+    ld	bc,32
+    ldir
 
-	pop	hl
-	pop	bc
-	djnz	.pass1
+    pop	hl
+    pop	bc
+    djnz	.pass1
 
-	ld	b,8
+    ld	b,8
 .pass2	
-	push	bc
+    push	bc
 
-	ld	e,(hl)
-	inc	hl
-	ld	d,(hl)
-	inc	hl
+    ld	e,(hl)
+    inc	hl
+    ld	d,(hl)
+    inc	hl
 
-	push	hl
+    push	hl
 
-	ld	h,d
-	ld	l,e
-	inc	de
-	ld	(hl),0
-	ld	bc,31
-	ldir
+    ld	h,d
+    ld	l,e
+    inc	de
+    ld	(hl),0
+    ld	bc,31
+    ldir
 
-	pop	hl
-	pop	bc
-	djnz	.pass2
-	ld	hl,table_addr_scr
-	ld	b,184
+    pop	hl
+    pop	bc
+    djnz	.pass2
+    ld	hl,table_addr_scr
+    ld	b,184
 .pass3		
-	push	bc
+    push	bc
 
-	ld	e,(hl)
-	inc	hl
-	ld	a,(hl)
+    ld	e,(hl)
+    inc	hl
+    ld	a,(hl)
     or  #20
     ld  d, a
-	inc	hl
+    inc	hl
 
-	push	hl
+    push	hl
 
-	ld	bc,14
-	add	hl,bc
-	ld	c,(hl)
-	inc	hl
-	ld	a,(hl)
+    ld	bc,14
+    add	hl,bc
+    ld	c,(hl)
+    inc	hl
+    ld	a,(hl)
     or #20
     ld b, a
 
-	ld	h,b
-	ld	l,c
+    ld	h,b
+    ld	l,c
 
-	ld	bc,32
-	ldir
+    ld	bc,32
+    ldir
 
-	pop	hl
-	pop	bc
-	djnz	.pass3
+    pop	hl
+    pop	bc
+    djnz	.pass3
 
-	ld	b,8
+    ld	b,8
 .pass4
-	push	bc
+    push	bc
 
-	ld	e,(hl)
-	inc	hl
-	ld	a,(hl)
+    ld	e,(hl)
+    inc	hl
+    ld	a,(hl)
     or  #20
     ld  d, a
-	inc	hl
+    inc	hl
 
-	push	hl
+    push	hl
 
-	ld	h,d
-	ld	l,e
-	inc	de
-	ld	(hl),0
-	ld	bc,31
-	ldir
+    ld	h,d
+    ld	l,e
+    inc	de
+    ld	(hl),0
+    ld	bc,31
+    ldir
 
-	pop	hl
-	pop	bc
-	djnz	.pass4
+    pop	hl
+    pop	bc
+    djnz	.pass4
     ld a, %00000001 : ld bc, #1ffd : out (c),a
     ei
-	ret
+    ret
 
 
 coords  dw 0 
