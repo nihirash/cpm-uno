@@ -38,6 +38,7 @@ Implemented control codes:
  * 0x15 - cursor down
  * 0x16 - cursor left(similar to backspace)
  * 0x17 - cursor right
+ * `ESC`+`=`+<X>+<Y> - set absolute position on screen 
 
 ## Porting possibility
 

@@ -72,6 +72,7 @@ putC:
     di
     push af
     call draw_cursor
+    ld a, (.is_esc) : and a : jr nz,.handle_esc
     pop af
 
     cp 1 : jp z, home
@@ -84,9 +85,38 @@ putC:
     cp 21 : jp z, cursor_down
     cp 22 : jp z, handleBS
     cp 23 : jp z, cursor_right
-
+    cp 27 : jr z, .esc
     call _putC
     jp draw_cursor
+.esc
+    ld a, 1 : ld (.is_esc),a
+    jp draw_cursor
+.handle_esc
+    pop bc
+    ld a,(.is_esc)
+    cp 2 : jr nc, .load
+    ld a,'=' : cp b : jr z, .prepare_load
+.not_esc
+    xor a : ld (.is_esc), a
+    jp draw_cursor
+
+.load
+    ld a, (.is_esc)
+    ld hl, coords
+    cp 2 : jr z, .loadX
+    inc hl
+.loadX
+    ld a,b
+    sub 32
+    ld (hl), a
+    
+    ld a, (.is_esc) : cp 3 : jr z, .not_esc
+.prepare_load
+    ld hl, .is_esc
+    inc (hl)
+    jp draw_cursor
+
+.is_esc dw 0
 
 cursor_up:
     ld a, (coords + 1)

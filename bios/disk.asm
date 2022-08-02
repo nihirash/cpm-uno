@@ -152,8 +152,9 @@ IDEDOS_PE_END_HEAD        equ 0x16
 init:
     di
     call load_part_table : jp nz, .error1
-
+    ld hl, (part_table_offset) : push hl
     ld a,0 : ld (cur_drive),a : ld iy, partition_1 : call find_partition
+    pop hl : ld (part_table_offset), hl
     ld a,1 : ld (cur_drive),a : ld iy, partition_2 : call find_partition
     ret
 
@@ -212,7 +213,7 @@ find_partition:
     dec b
     jp nz, .loop
     ld hl, (part_table_offset) : inc hl : ld (part_table_offset), hl
-    jr find_part_table
+    jp find_partition
 .unused
     or 1
     ret
