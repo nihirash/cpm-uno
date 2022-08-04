@@ -27,7 +27,7 @@ CP/M boots in emulator(still not tested in real HW), uses 80 symbols per line vi
 
 ### Terminal
 
-Currently, implemented **very dumb terminal**.
+Currently, implemented ADM-3 compatible terminal(like KayPro).
 
 Implemented control codes:
  * 0x01 - Home cursor
@@ -38,7 +38,7 @@ Implemented control codes:
  * 0x15 - cursor down
  * 0x16 - cursor left(similar to backspace)
  * 0x17 - cursor right
- * `ESC`+`=`+<X>+<Y> - set absolute position on screen 
+ * `ESC`+`=`+`YX` - set absolute position on screen 
 
 ## Porting possibility
 
