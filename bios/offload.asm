@@ -29,6 +29,83 @@ table_addr_scr
     defw	#50c0,#51c0,#52c0,#53c0,#54c0,#55c0,#56c0,#57c0
     defw	#50e0,#51e0,#52e0,#53e0,#54e0,#55e0,#56e0,#57e0
     endmodule
+
+    module keyboard
+                        
+Keyboard_Map:           DB 0x00,"z","x","c","v"
+                        DB "a","s","d","f","g"
+                        DB "q","w","e","r","t"
+                        DB "1","2","3","4","5"
+                        DB "0","9","8","7","6"
+                        DB "p","o","i","u","y"
+                        DB CR,"l","k","j","h"
+                        DB " ",0x00,"m","n","b"
+
+                                                
+Keyboard_Map_CS:        DB 0x00,"Z","X","C","V"
+                        DB "A","S","D","F","G"
+                        DB "Q","W","E","R","T"
+                        DB DEL,CAPS,0x00,0x00,0x08
+                        DB BS,TAB,0x0c,0x0b,0x0a
+                        DB "P","O","I","U","Y"
+                        DB CR,"L","K","J","H"
+                        DB ESC,0x00,"M","N","B"
+
+Keyboard_Map_SS:        DB 0x00,":","$","?","/"
+                        DB 0x00,0x00,0x00,0x00,0x00
+                        DB 0x00,0x00,0x00,"<",">"
+                        DB "!","@","#","$","%"
+                        DB "_",")","(","'","&"
+                        DB "\"",";",0x00,0x00,0x00
+                        DB CR,"=","+","-","^"
+                        DB " ",0x00,".",",","*"
+
+Keyboard_Map_CSSS:      
+                        DB 0x00,CNTRLZ,CNTRLX,CNTRLC,0x16
+                        DB 0x01,CNTRLS,0x04,0x06,0x07
+                        DB 0x11,0x17,CNTRLE,CNTRLR,0x14
+                        DB DEL,0x00,0x00,0x00,0x00
+                        DB DEL,0x00,TAB,0x00,0x00
+                        DB CNTRLP,0x0f,0x09,CNTRLU,0x19
+                        DB CR,0x0c,0x0b,0x0a,0x08
+                        DB " ",0x00,0x0d,0x0e,0x02
+Keyboard_Map_CL:        DB 0x00,"Z","X","C","V"
+                        DB "A","S","D","F","G"
+                        DB "Q","W","E","R","T"
+                        DB "1","2","3","4","5"
+                        DB "0","9","8","7","6"
+                        DB "P","O","I","U","Y"
+                        DB CR,"L","K","J","H"
+                        DB " ",0x00,"M","N","B"
+
+Keyboard_Map_CL_CS:     DB 0x00,"Z","X","C","V"
+                        DB "A","S","D","F","G"
+                        DB "Q","W","E","R","T"
+                        DB DEL,CAPS,0x00,0x00,0x08
+                        DB BS,TAB,0x0c,0x0b,0x0a
+                        DB "P","O","I","U","Y"
+                        DB CR,"L","K","J","H"
+                        DB ESC,0x00,"M","N","B"
+
+Keyboard_Map_CL_SS:        DB 0x00,":","$","?","/"
+                        DB 0x00,0x00,0x00,0x00,0x00
+                        DB 0x00,0x00,0x00,"<",">"
+                        DB "!","@","#","$","%"
+                        DB "_",")","(","'","&"
+                        DB "\"",";",0x00,0x00,0x00
+                        DB CR,"=","+","-","^"
+                        DB " ",0x00,".",",","*"
+
+Keyboard_Map_CL_CSSS:   
+                        DB 0x00,CNTRLZ,CNTRLX,CNTRLC,0x16
+                        DB 0x01,CNTRLS,0x04,0x06,0x07
+                        DB 0x11,0x17,CNTRLE,CNTRLR,0x14
+                        DB DEL,0x00,0x00,0x00,0x00
+                        DB DEL,0x00,TAB,0x00,0x00
+                        DB CNTRLP,0x0f,0x09,CNTRLU,0x19
+                        DB CR,0x0c,0x0b,0x0a,0x08
+                        DB " ",0x00,0x0d,0x0e,0x02    
+    endmodule
 ccp_backup:
     ds  FBASE-CBASE
     display "CCP_BACKUP_size: ",$-ccp_backup

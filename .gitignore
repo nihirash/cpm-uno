@@ -1,5 +1,7 @@
 .tmp/
 cpm.bin
+cpm.sys
+*.com
 test.hdd
 *.sna
 *.sld

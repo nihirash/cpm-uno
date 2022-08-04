@@ -66,6 +66,7 @@ boot:
 
 
     call disk.init
+    
 wboot:
     di
     ld a,%00000101 : ld bc, #1ffd : out (c),a
@@ -80,6 +81,11 @@ wboot:
     jp COMMAND
 
 gocpm:
+    ld bc, #ff
+    ld hl, 0
+    ld de, 1
+    xor a: ld (hl), a
+    ldir
 ; Setup jump table
     ld a, #0c3
     ld (0),a
@@ -95,12 +101,12 @@ gocpm:
 
     call install_int
 
-    im 1
-    ei
-
     ld c, 0
     call SELDSK
     call HOME
+    im 1
+    ei
+
     ret
 
 install_int:
@@ -124,7 +130,7 @@ bios_print:
     push hl : call display.putC : pop hl
     jr bios_print
 
-welcome db "Stop the war in Ukraine!", 13, 10, 13, 10
+welcome db 26, "Stop the war in Ukraine!", 13, 10, 13, 10
         db "ZXUno CP/M 2.2",13,10
         db "+3 MMU and Timex screen BIOS v.0.1",13, 10
         db "2022 (c) Nihirash",13,10,13,10

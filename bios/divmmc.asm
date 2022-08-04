@@ -120,17 +120,17 @@ read:
     inir : nop
     in a, (c) : nop
     in a, (c) : nop
+    call in_oout
     mmc_cs_dis
     ret
 
 write:
-    di
-    ld a, CMD_25 : call secm200
+    ld a, CMD_24 : call secm200
 .wait1
     call in_oout 
     inc a
     jr nz, .wait1
-    ld a, #fc : ld bc, mmc_data : out (c), a : nop
+    ld a, #fe : ld bc, mmc_data : out (c), a : nop
     ld b, #80 : otir : nop
     ld b, #80 : otir : nop
     ld b, #80 : otir : nop
@@ -142,12 +142,6 @@ write:
     call in_oout
     inc a
     jr nz, .wait2
-    ld c, mmc_data : ld a, #fd
-    out (c),a
-.wait3    
-    call in_oout
-    inc a
-    jr nz, .wait3
 
     mmc_cs_dis
     ret

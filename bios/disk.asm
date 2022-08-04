@@ -11,6 +11,8 @@ seldsk:
     jr nc, .exit
     ld (cur_drive), a
     ld hl, dpbase    
+    and a : ret z
+    ld hl, dpbase1
 .exit
     ret
 
@@ -63,6 +65,7 @@ read:
     ld de, (dma_addr)
     ld bc, 128
     ldir
+    ei
     xor a
     ret
 
@@ -279,6 +282,11 @@ dpbase:
     defw	0000h, 0000h
     defw	dirbf, dpblk
     defw	chk00, all00
+dpbase1:
+    defw	0000h, 0000h
+    defw	0000h, 0000h
+    defw	dirbf, dpblk
+    defw	chk00, all01
 ;
 dpblk:	;disk parameter block for all disks.
     defw	#0200		;sectors per track
@@ -293,9 +301,9 @@ dpblk:	;disk parameter block for all disks.
     defw	#0	    ;track offset
 
 
-dirbf   ds  128
+dirbf   ds  #ff
 chk00 ds #ff
-all00 ds 240
-
+all00 ds #ff
+all01 ds #ff
 
     endmodule

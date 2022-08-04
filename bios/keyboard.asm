@@ -31,8 +31,12 @@ update:
     ld a, (hl)
     cp	8
     ret c
-
+    ld a, %101 : ld bc, #1ffd : out (c),a
+     
     call Read_Keyboard
+    push af
+    ld a, %001 : ld bc, #1ffd : out (c),a
+    pop af
     cp CAPS : jr nz, .ok
     ld a, (cl_status) : xor #ff : ld (cl_status),a
     xor a 
@@ -112,6 +116,7 @@ Scan_Line7 db 0
 
 cl_status db #ff
 
+ESC EQU #1b
 CNTRLC  EQU 3   ;control-c
 CNTRLE  EQU 05H   ;control-e
 BS  EQU 08H   ;backspace
@@ -127,78 +132,6 @@ CNTRLX  EQU 18H   ;control-x
 CNTRLZ  EQU 1AH   ;control-z (end-of-file mark)
 DEL EQU 7FH   ;rubout
 CAPS EQU #FF				
-                        
-Keyboard_Map:           DB 0x00,"z","x","c","v"
-                        DB "a","s","d","f","g"
-                        DB "q","w","e","r","t"
-                        DB "1","2","3","4","5"
-                        DB "0","9","8","7","6"
-                        DB "p","o","i","u","y"
-                        DB CR,"l","k","j","h"
-                        DB " ",0x00,"m","n","b"
-
-                                                
-Keyboard_Map_CS:        DB 0x00,"Z","X","C","V"
-                        DB "A","S","D","F","G"
-                        DB "Q","W","E","R","T"
-                        DB DEL,CAPS,0x00,0x00,0x00
-                        DB BS,0x00,TAB,0x00,0x00
-                        DB "P","O","I","U","Y"
-                        DB CR,"L","K","J","H"
-                        DB " ",0x00,"M","N","B"
-
-Keyboard_Map_SS:        DB 0x00,":","$","?","/"
-                        DB 0x00,0x00,0x00,0x00,0x00
-                        DB 0x00,0x00,0x00,"<",">"
-                        DB "!","@","#","$","%"
-                        DB "_",")","(","'","&"
-                        DB "\"",";",0x00,0x00,0x00
-                        DB CR,"=","+","-","^"
-                        DB " ",0x00,".",",","*"
-
-Keyboard_Map_CSSS:      DB 0x00,CNTRLZ,CNTRLX,CNTRLC,0x00
-                        DB 0x00,CNTRLS,0x00,0x00,0x00
-                        DB 0x00,0x00,CNTRLE,CNTRLR,0x00
-                        DB DEL,0x00,0x00,0x00,0x00
-                        DB BS,0x00,TAB,0x00,0x00
-                        DB CNTRLP,0x00,0x00,CNTRLU,0x00
-                        DB CR,0x00,0x00,0x00,0x00
-                        DB " ",0x00,0x00,0x00,0x00
-Keyboard_Map_CL:        DB 0x00,"Z","X","C","V"
-                        DB "A","S","D","F","G"
-                        DB "Q","W","E","R","T"
-                        DB "1","2","3","4","5"
-                        DB "0","9","8","7","6"
-                        DB "P","O","I","U","Y"
-                        DB CR,"L","K","J","H"
-                        DB " ",0x00,"M","N","B"
-
-Keyboard_Map_CL_CS:        DB 0x00,"Z","X","C","V"
-                        DB "A","S","D","F","G"
-                        DB "Q","W","E","R","T"
-                        DB DEL,CAPS,0x00,0x00,0x00
-                        DB BS,0x00,TAB,0x00,0x00
-                        DB "P","O","I","U","Y"
-                        DB CR,"L","K","J","H"
-                        DB " ",0x00,"M","N","B"
-
-Keyboard_Map_CL_SS:        DB 0x00,":","$","?","/"
-                        DB 0x00,0x00,0x00,0x00,0x00
-                        DB 0x00,0x00,0x00,"<",">"
-                        DB "!","@","#","$","%"
-                        DB "_",")","(","'","&"
-                        DB "\"",";",0x00,0x00,0x00
-                        DB CR,"=","+","-","^"
-                        DB " ",0x00,".",",","*"
-
-Keyboard_Map_CL_CSSS:      DB 0x00,CNTRLZ,CNTRLX,CNTRLC,0x00
-                        DB 0x00,CNTRLS,0x00,0x00,0x00
-                        DB 0x00,0x00,CNTRLE,CNTRLR,0x00
-                        DB DEL,0x00,0x00,0x00,0x00
-                        DB BS,0x00,TAB,0x00,0x00
-                        DB CNTRLP,0x00,0x00,CNTRLU,0x00
-                        DB CR,0x00,0x00,0x00,0x00
-                        DB " ",0x00,0x00,0x00,0x00
 
 status	db 0
 counter db 0

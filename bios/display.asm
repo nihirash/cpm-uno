@@ -65,10 +65,17 @@ handleBS:
     jr .exit
 
 write:
+    di
+    localStack
+    exx
     ld a,c
 ; A - char
-
+    call tty_putC
+    usualStack
+    ei
+    ret
 putC:
+tty_putC:
     di
     push af
     call draw_cursor
@@ -85,6 +92,8 @@ putC:
     cp 21 : jp z, cursor_down
     cp 22 : jp z, handleBS
     cp 23 : jp z, cursor_right
+    cp 24 : jp z, clearline
+    cp 26 : jp z, cls
     cp 27 : jr z, .esc
     call _putC
     jp draw_cursor
@@ -103,7 +112,7 @@ putC:
 .load
     ld a, (.is_esc)
     ld hl, coords
-    cp 2 : jr z, .loadX
+    cp 3 : jr z, .loadX
     inc hl
 .loadX
     ld a,b
@@ -117,6 +126,27 @@ putC:
     jp draw_cursor
 
 .is_esc dw 0
+
+clearline:
+    ld de, (coords)
+.loop    
+    di
+    ld a, %00000101 : ld bc, #1ffd : out (c),a
+    
+    
+    ld a, 80
+    cp e : jp z, draw_cursor
+    push de
+    call find_screen : xor a 
+    dup 8
+    ld (de),a
+    inc d
+    edup
+    pop de
+    
+    inc e
+    jr .loop
+    
 
 cursor_up:
     ld a, (coords + 1)
@@ -177,7 +207,7 @@ cursor_right:
     ld hl, (coords)
     inc l
     ld a, l
-    cp  79
+    cp 80
     jr nc, .cr
 .ok
     ld (coords), hl
@@ -190,7 +220,7 @@ scrollCheck:
     ld a, h
     cp 24
     jp c, .exit
-    dec h
+    ld h, 23
     ld (coords), hl
     call scroll
 .exit

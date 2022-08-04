@@ -31,9 +31,9 @@ cpm:
 cpm_start:
     jp BOOT
     include "cpm.asm"
-    ds 100
+    ds #ff
 cpm_size = $ - cpm_start
     ENT
 
-    save3dos "cpm.bin", main, $-main
+    save3dos "cpm.sys", main, $-main
     savesna "test.sna", main
