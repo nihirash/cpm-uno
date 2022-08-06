@@ -67,7 +67,6 @@ handleBS:
 write:
     di
     localStack
-    exx
     ld a,c
 ; A - char
     call tty_putC

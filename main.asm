@@ -31,7 +31,7 @@ cpm:
 cpm_start:
     jp BOOT
     include "cpm.asm"
-    ds #ff
+    ds 64
 cpm_size = $ - cpm_start
     ENT
 

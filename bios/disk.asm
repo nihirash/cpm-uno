@@ -301,9 +301,9 @@ dpblk:	;disk parameter block for all disks.
     defw	#0	    ;track offset
 
 
-dirbf   ds  #ff
-chk00 ds #ff
-all00 ds #ff
-all01 ds #ff
+dirbf   ds  #80
+chk00 ds #80
+all00 ds 240
+all01 ds 240
 
     endmodule

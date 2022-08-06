@@ -1,8 +1,8 @@
 BOOT:	JP	bios.boot		
 WBOOT:	JP	bios.wboot
-CONST:	JP	keyboard.read_status
-CONIN:	JP	keyboard.read
-CONOUT:	JP	display.write
+CONST:	JP	console.status
+CONIN:	JP	console.in
+CONOUT:	JP	console.out
 LIST:	JP	bios.nothing
 PUNCH:	JP	bios.nothing
 READER:	JP	bios.nothing
@@ -19,13 +19,15 @@ SECTRN:	JP	disk.sectran
     macro localStack
     di
     ld (bios.int_handler.sp_save), sp
-    ld sp, #fffe
+    ld sp, #ffff
     push af, bc, de, hl,ix,iy
     exx
     push af, bc, de, hl,ix,iy
+    exx
     endm
 
     macro usualStack
+    exx
     pop iy,ix,hl, de, bc, af
     exx
     pop iy,ix,hl, de, bc, af
@@ -47,11 +49,12 @@ nothing:
 boot:
     di
     im 1
-    ld sp, #fffe
+    ld sp, #ffff
     ld a, 3 : ld bc, #7ffd : out (c), a
 
     call drive.init
     call display.init
+    call uart.init
 
     ld a, %00000101 : ld bc, #1ffd : out (c),a
     
@@ -98,7 +101,9 @@ gocpm:
 
     ld bc, #80
     call   SETDMA
-
+    
+    ld a, 1 : ld (IOBYTE),a
+    
     call install_int
 
     ld c, 0
@@ -131,16 +136,19 @@ bios_print:
     jr bios_print
 
 welcome db 26, "Stop the war in Ukraine!", 13, 10, 13, 10
-        db "ZXUno CP/M 2.2",13,10
+        db "ZXUno CP/M port",13,10
         db "+3 MMU and Timex screen BIOS v.0.1",13, 10
         db "2022 (c) Nihirash",13,10,13,10
-        db "BDOS and CCP v 2.2",13,10
-        db "1979 (c) Digital research",13,10,13,10
+        db "BDOS and CCP v 2.2 with patches",13,10
+        db "1979 (c) Digital research",13,10
+        db "2022 (c) Nihirash",13,10,13,10
         db 0
 
     endmodule
 
     include "disk.asm"
     include "display.asm"
+    include "console.asm"
     include "keyboard.asm"
     include "divmmc.asm"
+    include "uart.asm"

@@ -29,7 +29,7 @@ update:
     ld hl, counter
     inc (hl)
     ld a, (hl)
-    cp	8
+    cp	7
     ret c
     ld a, %101 : ld bc, #1ffd : out (c),a
      

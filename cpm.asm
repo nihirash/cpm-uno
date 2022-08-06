@@ -11,8 +11,6 @@
 ;   Set memory limit here. This is the amount of contigeous
 ; ram starting from 0000. CP/M will reside at the end of this space.
 ;
-MEM	EQU	62		;for a 62k system (TS802 TEST - WORKS OK).
-;
 IOBYTE	EQU	3		;i/o definition byte.
 TDRIVE	EQU	4		;current drive name and user number.
 ENTRY	EQU	5		;entry point for the cp/m bdos.
@@ -629,8 +627,17 @@ COMMAND:LD	SP,CCPSTACK	;setup stack area.
 CMMND1:	LD	SP,CCPSTACK	;set stack straight.
     CALL	CRLF		;start a new line on the screen.
     CALL	GETDSK		;get current drive.
-    ADD	A,'a'
+    ADD	A,'A'
     CALL	PRINT		;print current drive.
+    
+    CALL    GETUSR
+    CP 10
+    jr c, .printUser
+    add a, 'A' - '0' - 10
+.printUser
+    add A, '0'
+    CALL    PRINT
+
     LD	A,'>'
     CALL	PRINT		;and add prompt.
     CALL	GETINP		;get line from user.
@@ -1406,7 +1413,7 @@ OUTCHAR:LD	A,(OUTFLAG)	;check output flag.
     POP	BC
 OUTCHR1:LD	A,C		;update cursors position.
     LD	HL,CURPOS
-    CP	DEL		;rubouts don't do anything here.
+    CP  DEL		;rubouts don't do anything here.
     RET	Z
     INC	(HL)		;bump line pointer.
     CP	' '		;and return if a normal character.
@@ -1527,10 +1534,11 @@ RDBUF3:	CP	DEL		;user typed a rubout?
     LD	A,B		;ignore at the start of the line.
     OR	A
     JP	Z,RDBUF1
-    LD	A,(HL)		;ok, echo the prevoius character.
+    LD	A,BS    ;ok, echo the prevoius character.
     DEC	B		;and reset pointers (counters).
-    DEC	HL
-    JP	RDBUF15
+    LD	A,(CURPOS)	;if we backspace to the start of the line,
+    LD	(OUTFLAG),A	;treat as a cancel (control-x).
+    JP	RDBUF10
 RDBUF4:	CP	CNTRLE		;physical end of line?
     JP	NZ,RDBUF5
     PUSH	BC		;yes, do it.

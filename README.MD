@@ -40,6 +40,18 @@ Implemented control codes:
  * 0x17 - cursor right
  * `ESC`+`=`+`YX` - set absolute position on screen 
 
+#### Keyboard
+
+Arrows work like ADM-3A(CTRL+hjkl), backspace will send `0x7f` code(bdos line editor patched for handling it right). 
+
+`CTRL` key is implemented as `EXTENDED` key(in ps/2 keyboard - TAB or CS+SS on ZX keyboard). 
+
+### ZXUno UART(WiFi)
+
+You can access ZXUno's UART via IOBYTE handling. Uart accessible via TTY device, when console is CRT(honestly, any other devices are console).
+
+Kermit that works via IOBYTE should work without problems. If you'd like talk to ESP - you should remember that it requires CRLF for commands(after pressing enter you should add CTRL+J). 
+
 ## Porting possibility
 
 If you'll drop off timex screen driver and replace it with usual speccy screen driver - it should work out of the box with Speccy +2A/+3 with divMMC as +3e drive. 
