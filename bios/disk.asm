@@ -286,7 +286,7 @@ dpbase1:
     defw	0000h, 0000h
     defw	0000h, 0000h
     defw	dirbf, dpblk
-    defw	chk00, all01
+    defw	chk01, all01
 ;
 dpblk:	;disk parameter block for all disks.
     defw	#0200		;sectors per track
@@ -303,6 +303,7 @@ dpblk:	;disk parameter block for all disks.
 
 dirbf   ds  #80
 chk00 ds #80
+chk01 ds #80
 all00 ds 240
 all01 ds 240
 

@@ -70,6 +70,9 @@ boot:
 
     call disk.init
     
+    ld c, 0
+    call SELDSK
+    xor a : ld (4), a
 wboot:
     di
     ld a,%00000101 : ld bc, #1ffd : out (c),a
@@ -81,14 +84,11 @@ wboot:
     ld a,%00000001 : ld bc, #1ffd : out (c),a
      
     call gocpm
-    jp COMMAND
+    ld a, (TDRIVE)
+    ld c,a
+    jp CBASE
 
 gocpm:
-    ld bc, #ff
-    ld hl, 0
-    ld de, 1
-    xor a: ld (hl), a
-    ldir
 ; Setup jump table
     ld a, #0c3
     ld (0),a
@@ -106,8 +106,6 @@ gocpm:
     
     call install_int
 
-    ld c, 0
-    call SELDSK
     call HOME
     im 1
     ei
@@ -139,9 +137,9 @@ welcome db 26, "Stop the war in Ukraine!", 13, 10, 13, 10
         db "ZXUno CP/M port",13,10
         db "+3 MMU and Timex screen BIOS v.0.1",13, 10
         db "2022 (c) Nihirash",13,10,13,10
-        db "BDOS and CCP v 2.2 with patches",13,10
+        db "BDOS v 2.2",13,10
         db "1979 (c) Digital research",13,10
-        db "2022 (c) Nihirash",13,10,13,10
+        db "ZCPR (c) CCP-GROUP",13,10,13,10
         db 0
 
     endmodule

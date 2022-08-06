@@ -5,3 +5,5 @@ cpm.sys
 test.hdd
 *.sna
 *.sld
+zcpr.bin
+*.hex

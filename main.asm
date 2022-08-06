@@ -26,12 +26,11 @@ page6:
 page6_len = $ - page6
 
 cpm:
-    DISP $ffff - cpm_size
+    DISP $d6b0
     DISPLAY "CP/M starts here: ", $
 cpm_start:
     jp BOOT
     include "cpm.asm"
-    ds 64
 cpm_size = $ - cpm_start
     ENT
 
