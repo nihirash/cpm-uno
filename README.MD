@@ -1,6 +1,6 @@
 # CP/M 2.2 Port for ZXUno
 
-This repository contains vanilla CP/M 2.2 ported to ZXUno.
+This repository contains vanilla CP/M 2.2 ported to ZXUno. It uses RCPR CCP replacement.
 
 It uses +3DOS volumes on divMMC as CP/M's partitions and Timex Hi-Res video mode
 for 80 characters text output

@@ -1,0 +1,211 @@
+    ORG 100H
+BDOS EQU 5
+TTY  EQU 0
+CRT  EQU 1
+
+USE_MODEM EQU 1
+
+MAIN:
+    LD HL, 81H
+    LD A, (HL)
+    AND A
+    JP Z, DESCR ; IF NO INFO ABOUT HOST/PORT
+    CALL SKIP_SPACE
+    LD DE, HOST
+ARG1
+    LD A, (HL)
+    AND A
+    JP Z, DESCR
+    CP 13
+    JP Z, DESCR
+    INC HL
+    CP ' '
+    JR Z, ARG2
+    LD (DE), A
+    INC DE
+    JP ARG1
+ARG2
+   LD A, '$'
+   LD (DE), A
+   CALL SKIP_SPACE
+   LD DE, PORT
+ARG21
+   LD A,(HL)
+   INC HL
+   AND A
+   JR Z, WORK
+   CP ' '
+   JR Z, WORK
+   LD (DE), A
+   INC DE
+   JR ARG21
+WORK    
+    LD   A, '$'
+    LD   (DE), A
+    
+    LD   DE, C_AT
+    CALL AT_CMD
+    AND  A
+    JP   Z, ERROR        
+
+    LD   DE, C_MODE
+    CALL AT_CMD
+    AND  A
+    JP   Z, ERROR        
+
+    CALL SET_TTY
+    LD   DE,C_CON1
+    CALL PRINTS
+    LD   DE,HOST
+    CALL PRINTS
+    LD   DE,C_CON2
+    CALL PRINTS
+    LD   DE,PORT
+    CALL PRINTS
+    LD   DE,C_CON3
+    CALL AT_CMD
+    AND  A
+    JR   Z, ERROR        
+     
+    LD   DE, C_SND
+    CALL AT_CMD
+    
+    RST 0
+ERROR
+    LD   DE,ERR
+    CALL PRINTS
+    RST 0
+ERR DEFB 13,10,"Initialization error happens",13,10,"$"
+
+SKIP_SPACE
+    LD A,(HL)
+    AND A
+    RET Z
+    CP ' '
+    RET NZ
+    INC HL
+    JR SKIP_SPACE
+    
+DESCR
+    LD DE, DESCR_MSG
+    CALL PRINTS
+    RST 0
+DESCR_MSG DB 13,10,"USAGE: DIAL <HOST> <PORT>",13,10,"$"
+
+PRINTS
+   LD C, 09H
+   JP BDOS
+
+SET_TTY:
+  IF USE_MODEM
+   PUSH DE
+   LD   C, 8
+   LD   E, TTY
+   CALL BDOS
+   POP  DE
+  ENDIF
+  RET
+  
+SET_CRT:
+  IF USE_MODEM
+   PUSH AF
+   LD   C, 8
+   LD   E, CRT
+   CALL BDOS
+   POP  AF
+  ENDIF
+  RET
+    
+AT_CMD:
+  CALL SET_TTY 
+  CALL PRINTS
+  CALL OK_ERR
+  CALL SET_CRT   
+  RET
+  
+OK_ERR:
+   CALL READ_RESP    
+; CHECK FOR RESPONSES
+   CALL IS_OK 
+   LD A, 0FFH
+   RET Z
+   
+   CALL IS_ERR
+   LD A, 00H
+   RET Z
+   JR OK_ERR
+
+IS_OK:
+   LD HL, R_OK
+   LD DE, DATA
+   JP STRCMP
+
+IS_ERR:
+   LD HL, R_ERR
+   LD DE, DATA
+   JP STRCMP
+
+STRCMP:
+     LD A,(HL)
+     LD B, A
+     LD A, (DE)
+     CP B
+     RET NZ
+     OR A
+     RET Z
+
+     INC HL
+     INC DE
+     JR STRCMP
+     
+READ_RESP:
+; CLEAN UP BUFFER
+     LD   HL, DATA-1
+     LD   DE, DATA
+     LD   BC, 80
+     XOR  A
+     LD   (HL), A
+     LDIR 
+; READ
+     LD   DE, DATA
+READ_LOOP
+     PUSH DE
+READZERO
+     LD   C, 6
+     LD   E, 0FFH
+     CALL BDOS
+     AND  A
+     JR   Z, READZERO
+     POP  DE
+     CP   13
+     RET  Z
+     CP   10
+     RET  Z
+     LD   (DE), A
+     INC  DE
+     JR   READ_LOOP
+         
+
+C_AT   DEFB "ATE0",13,10,"$"
+
+C_MODE DEFB "AT+CIPMODE=1",13,10,"$"
+
+C_CON1 DEFB 'AT+CIPSTART="TCP","$'
+C_CON2 DEFB '",$'
+C_CON3 DEFB 13,10,'$'
+
+C_SND  DEFB "AT+CIPSEND",13,10,"$"
+
+; AWAITED RESPONSES
+R_OK  DEFB "OK",0
+R_ERR DEFB "ERROR",0
+       
+; RESPONSE BUFFER
+DATA:
+       DEFS 80
+
+HOST:
+     DEFS 40
+PORT:
+     DEFS 6
+     DEFB "HERE ENDS ALL MY DATA"

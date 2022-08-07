@@ -124,7 +124,7 @@ CPRLOC	EQU	0	;MOVCPM IMAGE
 ; to that value as as in the following line:
 ;
 ;CPRLOC	EQU	0BD00H	;FILL IN WITH BDOSLOC SUPPLIED VALUE
-CPRLOC	EQU	0D6b3H	;WW - CUSTOMIZED FOR ROMWBW
+CPRLOC	EQU	0D5b3H	;WW - CUSTOMIZED FOR ROMWBW
 ;
 ; Note that you should only use one method or the other.
 ; Do NOT define CPRLOC twice!

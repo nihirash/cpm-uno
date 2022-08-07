@@ -39,6 +39,7 @@ DEL	EQU	7FH		;rubout
 ;
 ;
 CBASE:	
+    display "CCP: ", $
     incbin "zcpr.bin"
 ;**************************************************************
 ;*

@@ -1,0 +1,46 @@
+    ORG 100H
+TTY  EQU 0
+CRT  EQU 1
+BDOS EQU 5
+
+START:
+; Step 1
+     LD    DE, MSG1
+     CALL  PRINTS
+     CALL  SET_TTY
+     LD    DE, CMD1
+     CALL  PRINTS
+     EI
+     HALT
+     HALT
+     HALT
+     HALT
+; Step 2
+     CALL  SET_CRT
+     LD    DE, MSG2
+     CALL  PRINTS
+     CALL  SET_TTY
+     LD    DE, CMD2
+     CALL  PRINTS
+     
+     CALL SET_CRT
+     RET
+
+PRINTS:
+      LD C,9
+      JP BDOS
+
+SET_CRT:
+      LD E,CRT
+      JR SET_IO
+SET_TTY:
+      LD E,TTY
+SET_IO:
+      LD C,8
+      JP BDOS
+
+MSG1 DEFB "Switching to command mode", 13, 10, "$" 
+MSG2 DEFB "Resetting chip",13,10,"$"
+
+CMD1 DEFB "+++$"
+CMD2 DEFB "AT+RST",13,10,"$"

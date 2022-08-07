@@ -5,15 +5,27 @@ set_dma:
     ret
 
 seldsk:
+    ld a, (cur_drive) : ld (.drive), a
     ld hl, 0
+    ld a, (volumes_found)
+    cp c
+    jr c, .exit
     ld a, c
-    cp 2
-    jr nc, .exit
     ld (cur_drive), a
     ld hl, dpbase    
     and a : ret z
-    ld hl, dpbase1
+.loop    
+    ld de, dpbase1 - dpbase
+    add hl, de
+    dec a
+    jr nz ,.loop
+    ret
 .exit
+    ld a, 0
+.drive = $ - 1 
+    ld (TDRIVE), a
+    ld (cur_drive), a
+    ld hl, 0
     ret
 
 settrk:
@@ -157,10 +169,14 @@ init:
     call load_part_table : jp nz, .error1
     ld hl, (part_table_offset) : push hl
     ld a,0 : ld (cur_drive),a : ld iy, partition_1 : call find_partition
+    pop hl : ld (part_table_offset), hl : push hl
+    ld a,1 : ld (cur_drive),a : ld iy, partition_2 : call find_partition : jr nz, .notFound
     pop hl : ld (part_table_offset), hl
-    ld a,1 : ld (cur_drive),a : ld iy, partition_2 : call find_partition
+    ld a,2 : ld (cur_drive),a : ld iy, partition_3 : call find_partition 
     ret
-
+.notFound:
+    pop hl
+    ret
 .error1
     ld hl, .error1msg
     call bios.bios_print
@@ -208,6 +224,7 @@ find_partition:
     ld (iy + 1), h
     ld a, (ix + IDEDOS_PE_START_HEAD)
     ld (iy + 2), a
+    ld hl, volumes_found : inc (hl)
     xor a
     ret
 .wrong
@@ -273,20 +290,26 @@ part_table_offset dw 0
 cur_sect   ds 4
 sec_buffer ds 512
 
-volumes_found db 0
-drives_offsets  dw 8
+volumes_found db #ff
+drives_offsets  dw 12
 partition_1 db 'CPM.A           '
 partition_2 db 'CPM.B           '
+partition_3 db 'CPM.C           '
 dpbase:	
     defw	0000h, 0000h
     defw	0000h, 0000h
     defw	dirbf, dpblk
-    defw	chk00, all00
+    defw	0000h, all00
 dpbase1:
     defw	0000h, 0000h
     defw	0000h, 0000h
     defw	dirbf, dpblk
-    defw	chk01, all01
+    defw	0000h, all01
+dpbase2:
+    defw	0000h, 0000h
+    defw	0000h, 0000h
+    defw	dirbf, dpblk
+    defw	0000h, all02
 ;
 dpblk:	;disk parameter block for all disks.
     defw	#0200		;sectors per track
@@ -297,14 +320,12 @@ dpblk:	;disk parameter block for all disks.
     defw	#01ff	;directory max
     defm	240		;alloc 0
     defm	0		;alloc 1
-    defw	32768	;check size
+    defw	0	    ;check size - don't care about it - SD card isn't removable
     defw	#0	    ;track offset
 
 
 dirbf   ds  #80
-chk00 ds #80
-chk01 ds #80
 all00 ds 240
 all01 ds 240
-
+all02 ds 240
     endmodule

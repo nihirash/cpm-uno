@@ -26,7 +26,7 @@ page6:
 page6_len = $ - page6
 
 cpm:
-    DISP $d6b0
+    DISP $d5b0
     DISPLAY "CP/M starts here: ", $
 cpm_start:
     jp BOOT
