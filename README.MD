@@ -17,9 +17,12 @@ In Zesarux I've enabled speccy +2A with MMC emulation via divMMC but without div
 
 You can also use +3e roms to check how it works with basic volumes.
 
-MMC card should have +3DOS volumes. Most important things are - SD card should have couple of volumes:
+MMC card should have +3DOS volumes. Most important things are - SD card should have these volumes:
  * `CPM.A`(case sensitive - important create them in uppercase, 8 megs size - cause CP/M 2.2 limitations)
  * `CPM.B`(similar)
+ * `CPM.C`
+
+ Only `CPM.A` volume is mandatory but it easier to use with 3 drives.
 
 ## Current state
 
