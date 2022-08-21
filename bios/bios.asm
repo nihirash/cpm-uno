@@ -55,6 +55,10 @@ boot:
     call drive.init
     call display.init
     call uart.init
+    ;; Force turbo mode
+    ld bc, 64571 : ld a, #0b : out (c), a
+    ld bc, 64827 : in a, (c) : or #c0 : out (c),a
+     
 
     ld a, %00000101 : ld bc, #1ffd : out (c),a
     
