@@ -64,6 +64,12 @@ Porting to other hardware will require a bit more work.
 ## Used third party components
 
 I've used some 3rd party components:
- * I've used ZXMMC driver as reference for loading +3DOS partition table
- * I've used Andrew Owen's 6x8 font 
- * I've used DR's CCP and BDOS
+ * ZXLDR's keyboard driver was used as reference
+ * ZXMMC driver as reference for loading +3DOS partition table
+ * Andrew Owen's 6x8 font 
+ * DR's BDOS
+ * ZCPR as CCP replacement
+
+## License
+
+See ![LICENSE](LICENSE) for details.
