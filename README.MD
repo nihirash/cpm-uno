@@ -72,4 +72,4 @@ I've used some 3rd party components:
 
 ## License
 
-See ![LICENSE](LICENSE) for details.
+See [LICENSE](LICENSE) for details.
