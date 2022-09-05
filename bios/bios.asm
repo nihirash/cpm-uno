@@ -146,12 +146,13 @@ bios_print:
     include "divmmc.asm"
     include "uart.asm"
 
-welcome db 26, "Stop the war in Ukraine!", 13, 10, 13, 10
+welcome db 26, "Stop russian war aggressive in Ukraine!", 13, 10, 13, 10
         db "ZXUno CP/M port",13,10
         db "+3 MMU and Timex screen BIOS v.0.1",13, 10
         db "2022 (c) Nihirash",13,10,13,10
         db "BDOS v 2.2",13,10
         db "1979 (c) Digital research",13,10
-        db "ZCPR as CCP replacement",13,10,13,10
+        db "ZCPR as CCP replacement",13,10
+        db "Chloe Sans Font (c) Andrew Owen", 13,10, 13, 10
         db 0
     display "BIOS SIZE: ", $

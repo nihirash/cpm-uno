@@ -66,7 +66,7 @@ Porting to other hardware will require a bit more work.
 I've used some 3rd party components:
  * ZXLDR's keyboard driver was used as reference
  * ZXMMC driver as reference for loading +3DOS partition table
- * Andrew Owen's 6x8 font 
+ * Chloe Sans 6x8 font 
  * DR's BDOS
  * ZCPR as CCP replacement
 
