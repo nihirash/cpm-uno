@@ -6,7 +6,9 @@ UART_BYTE_SENDING = #40
 SCANDBLCTRL_REG = #0B
 ZXUNO_ADDR = #FC3B
 ZXUNO_REG = #FD3B
-
+    display "Uart read:", read
+    display "Uart write", write
+    display "Uart status", status
 init:
     ld bc, ZXUNO_ADDR : ld a, UART_STAT_REG : out (c), a
     ld bc, ZXUNO_REG : in A, (c)
@@ -61,9 +63,6 @@ status:
     
 ; Read byte from UART
 ; A: byte
-; B:
-;     1 - Was read
-;     0 - Nothing to read
 uartRead:
     ld a, (poked_byte) : and 1 : jr nz, .retBuff
 

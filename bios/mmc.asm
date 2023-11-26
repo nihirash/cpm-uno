@@ -1,7 +1,17 @@
     module drive
+    ifdef DIVMMC
 mmc_en = #e7
 mmc_data = #eb
 slot1 = #fe
+slot0 = #ff
+    endif
+
+    ifdef ZC
+mmc_en = #77
+mmc_data = #57
+slot1 = #1
+slot0 = #0
+    endif
 
 CMD_12    EQU 0x4C    ;STOP_TRANSMISSION
 CMD_17    EQU 0x51    ;READ_SINGLE_BLOCK
@@ -21,7 +31,7 @@ ACMD_41   EQU 0x69   ;SD_SEND_OP_COND
 
     macro mmc_cs_dis
         push af
-        ld a, #ff : out (mmc_en), a
+        ld a, slot0 : out (mmc_en), a
         pop af
     endm
 

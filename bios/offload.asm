@@ -1,6 +1,13 @@
     module display
 font: 
-    incbin "font.bin"
+    ifdef TIMEX_SCR
+    incbin "blobs/font80.bin"
+    endif
+
+    ifdef SPECCY_SCR
+    incbin "blobs/font64.bin"
+    endif
+
 table_addr_scr		
     defw	#4000,#4100,#4200,#4300,#4400,#4500,#4600,#4700
     defw	#4020,#4120,#4220,#4320,#4420,#4520,#4620,#4720
